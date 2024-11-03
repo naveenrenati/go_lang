@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nav-ingress
+  namespace: default
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing  # Public ALB
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'  # Specify ports to listen on
+    alb.ingress.kubernetes.io/target-type: instance  # Target type
+spec:
+  ingressClassName: alb  # Use the new field for specifying the ingress class
+  rules:
+    - host: your-domain.com  # Replace with your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nav-service
+                port:
+                  number: 80  # Service port
